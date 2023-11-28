@@ -4,11 +4,13 @@ import { Login } from "./screens/login/Login";
 import { AuthenticatedRoute } from "../HOC/AuthenticatedRoute";
 import AuthProvider from "../providers/AuthProvider";
 import { AnonymousRoute } from "../HOC/AnonymousRoute";
+import { Home } from "./screens/home/Home";
 
 export function Root() {
   return (
     <AuthProvider>
       <Routes>
+        <Route path="/home" element={<AuthenticatedRoute page={<Home />} />} />
         <Route
           path="/"
           element={<AuthenticatedRoute page={<App />} />}
