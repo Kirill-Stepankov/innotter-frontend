@@ -5,34 +5,31 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { FC, useContext } from "react";
-import { instance } from "../../../api/axios";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { ILoginInput, ITokens } from "./schemas";
+import { AuthService } from "../../../services/AuthService";
+import { LocalStorageService } from "../../../services/LocalStorageService";
 
 export const LoginForm: FC = () => {
   const navigate = useNavigate();
   const context = useContext(AuthContext);
-  const getTokens = (login_data: ILoginInput) => {
-    return instance
-      .post("http://0.0.0.0:8000/auth/login", login_data)
-      .then((res) => res.data);
-  };
 
   const handleErrors = (error: AxiosError) => {
     if (error.response?.status == 422) {
+      // исправить
       console.log(error.response.data);
     }
   };
 
   const handleTokens = (data: ITokens) => {
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
+    LocalStorageService.setAccessToken(data.access_token);
+    LocalStorageService.setRefreshToken(data.refresh_token);
     context?.setIsAuth(true);
     return navigate("/");
   };
 
   const { mutate } = useMutation({
-    mutationFn: getTokens,
+    mutationFn: AuthService.getTokens,
     onError: handleErrors,
     onSuccess: handleTokens,
   });

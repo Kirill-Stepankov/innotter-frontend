@@ -2,6 +2,8 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../api/axios";
 import { AuthContext } from "../providers/AuthProvider";
+import { AuthService } from "../services/AuthService";
+import { LocalStorageService } from "../services/LocalStorageService";
 
 export const useAxiosInterceptors = () => {
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ export const useAxiosInterceptors = () => {
   useEffect(() => {
     const requestInterceptor = instance.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem("access_token");
+        const token = LocalStorageService.getAccessToken();
         if (token) {
           config.headers["token"] = token;
         }
@@ -32,10 +34,9 @@ export const useAxiosInterceptors = () => {
           if (
             originalRequest.url === "http://0.0.0.0:8000/auth/refresh-token"
           ) {
-            localStorage.removeItem("refresh_token");
-            localStorage.removeItem("access_token");
+            LocalStorageService.removeRefreshToken();
+            LocalStorageService.removeAccessToken();
 
-            console.log("sssssssssss");
             context?.setIsAuth(false);
             navigate("/login", { replace: true });
             return Promise.reject(error);
@@ -43,28 +44,9 @@ export const useAxiosInterceptors = () => {
 
           if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            const refreshToken = localStorage.getItem("refresh_token");
-            localStorage.removeItem("access_token");
-            return instance
-              .post(
-                "http://0.0.0.0:8000/auth/refresh-token",
-                {},
-                {
-                  headers: {
-                    token: refreshToken,
-                  },
-                }
-              )
-              .then((res) => {
-                if (res.status === 200) {
-                  localStorage.setItem("refresh_token", res.data.refresh_token);
-                  localStorage.setItem("access_token", res.data.access_token);
-
-                  instance.defaults.headers.common["token"] =
-                    localStorage.getItem("access_token");
-                  return instance(originalRequest);
-                }
-              });
+            const refreshToken = LocalStorageService.getRefreshToken();
+            LocalStorageService.removeAccessToken();
+            return AuthService.refreshTokens(refreshToken, originalRequest)
           }
         }
         return Promise.reject(error);

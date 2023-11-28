@@ -1,4 +1,5 @@
 import { FC, ReactNode, createContext, useState } from "react";
+import { LocalStorageService } from "../services/LocalStorageService";
 
 interface IAuthContext {
     isAuth: boolean;
@@ -13,7 +14,7 @@ interface IAuthProvider {
 
 const AuthProvider: FC<IAuthProvider> = ({children}) => {
   const [isAuth, setIsAuth] = useState<boolean>(
-    !!localStorage.getItem("access_token")
+    !!LocalStorageService.getAccessToken()
   );
 
   return (
