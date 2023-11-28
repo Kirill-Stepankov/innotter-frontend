@@ -8,6 +8,7 @@ services:
       - "5000:5000"
     volumes:
       - ./innotter:/app
+      - /innotter/node_modules
     networks:
       - innotter
 networks:
