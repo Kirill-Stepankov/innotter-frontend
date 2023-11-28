@@ -12,7 +12,6 @@ export const App = () => {
   return (
     <>
       <div>
-        <p>helxlo</p>
         {isLoading ? "Loading..." : JSON.stringify(data)}
         {error?.message}
       </div>

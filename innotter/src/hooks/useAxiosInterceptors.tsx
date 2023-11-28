@@ -32,7 +32,7 @@ export const useAxiosInterceptors = () => {
 
         if (error.response.status === 401) {
           if (
-            originalRequest.url === "http://0.0.0.0:8000/auth/refresh-token"
+            originalRequest.url === import.meta.env.VITE_REFRESH_TOKEN_URL
           ) {
             LocalStorageService.removeRefreshToken();
             LocalStorageService.removeAccessToken();

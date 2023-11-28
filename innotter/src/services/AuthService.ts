@@ -5,18 +5,18 @@ import { LocalStorageService } from "./LocalStorageService";
 export const AuthService = {
   getTokens(login_data: ILoginInput) {
     return instance
-      .post("http://0.0.0.0:8000/auth/login", login_data)
+      .post(import.meta.env.VITE_LOGIN_URL, login_data)
       .then((res) => res.data);
   },
 
   getUserMe() {
-    return instance.get("http://0.0.0.0:8000/user/me").then((res) => res.data);
+    return instance.get(import.meta.env.VITE_USER_ME_URL).then((res) => res.data);
   },
 
   refreshTokens(refreshToken: string | null, originalRequest: object) {
     return instance
       .post(
-        "http://0.0.0.0:8000/auth/refresh-token",
+        import.meta.env.VITE_REFRESH_TOKEN_URL,
         {},
         {
           headers: {

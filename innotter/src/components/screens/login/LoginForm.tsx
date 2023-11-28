@@ -16,7 +16,7 @@ export const LoginForm: FC = () => {
 
   const handleErrors = (error: AxiosError) => {
     if (error.response?.status == 422) {
-      // исправить
+      // пока просто выводит ошибку в консоль
       console.log(error.response.data);
     }
   };
