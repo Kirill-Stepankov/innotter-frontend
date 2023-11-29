@@ -7,10 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { FC, useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { ILoginInput, ITokens } from "./schemas";
-import { AuthService } from "../../../services/AuthService";
 import { LocalStorageService } from "../../../services/LocalStorageService";
+import { useAuthService } from "../../../hooks/useAuthService";
 
 export const LoginForm: FC = () => {
+  const authService = useAuthService();
   const navigate = useNavigate();
   const context = useContext(AuthContext);
 
@@ -29,7 +30,7 @@ export const LoginForm: FC = () => {
   };
 
   const { mutate } = useMutation({
-    mutationFn: AuthService.getTokens,
+    mutationFn: authService.getTokens,
     onError: handleErrors,
     onSuccess: handleTokens,
   });

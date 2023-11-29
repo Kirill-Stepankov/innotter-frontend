@@ -5,10 +5,12 @@ import { AuthenticatedRoute } from "../HOC/AuthenticatedRoute";
 import AuthProvider from "../providers/AuthProvider";
 import { AnonymousRoute } from "../HOC/AnonymousRoute";
 import { Home } from "./screens/home/Home";
+import Navbar from "./Navbar";
 
 export function Root() {
   return (
     <AuthProvider>
+      <Navbar />
       <Routes>
         <Route path="/home" element={<AuthenticatedRoute page={<Home />} />} />
         <Route

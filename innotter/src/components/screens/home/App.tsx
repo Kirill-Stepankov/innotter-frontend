@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAxiosInterceptors } from "../../../hooks/useAxiosInterceptors";
-import { AuthService } from "../../../services/AuthService";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthService } from "../../../hooks/useAuthService";
 
 export const App = () => {
+  const authService = useAuthService()
   useAxiosInterceptors();
   const [count, setCount] = useState<number>(0)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["me"],
-    queryFn: AuthService.getUserMe,
+    queryFn: authService.getUserMe,
   });
   return (
     <>
