@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { instance } from "../api/axios";
-import { ILoginInput } from "../components/screens/login/schemas";
+import { ILoginInput, ITokens } from "../components/screens/login/schemas";
 import { LocalStorageService } from "../services/LocalStorageService";
 import { AuthContext } from "../providers/AuthProvider";
 import { useNavigate } from "react-router";
+import { ISignupInput } from "../components/screens/signup/schemas";
 
 export const useAuthService = () => {
   const context = useContext(AuthContext);
@@ -51,6 +52,19 @@ export const useAuthService = () => {
       context?.setIsAuth(false);
       navigate("/login");
     },
+
+    login(data: ITokens) {
+      LocalStorageService.setAccessToken(data.access_token);
+      LocalStorageService.setRefreshToken(data.refresh_token);
+      context?.setIsAuth(true);
+      return navigate("/");
+    },
+
+    signup(signup_data: ISignupInput) {
+      return instance
+        .post(import.meta.env.VITE_SIGNUP_URL, signup_data)
+        .then((res) => res.data);
+    }
   };
 
   return AuthService;

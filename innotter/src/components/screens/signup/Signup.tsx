@@ -1,7 +1,11 @@
+import { SignupForm } from "./SignupForm";
+
 export const Signup = () => {
   return (
     <>
-      <div>Signup</div>
+      <div>Signup 
+        <SignupForm />
+        </div>
     </>
   );
 }

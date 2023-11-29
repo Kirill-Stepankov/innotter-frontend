@@ -6,6 +6,7 @@ import AuthProvider from "../providers/AuthProvider";
 import { AnonymousRoute } from "../HOC/AnonymousRoute";
 import { Home } from "./screens/home/Home";
 import Navbar from "./Navbar";
+import Signup from "./screens/signup/Signup";
 
 export function Root() {
   return (
@@ -18,6 +19,7 @@ export function Root() {
           element={<AuthenticatedRoute page={<App />} />}
         />
         <Route path="/login" element={<AnonymousRoute page={<Login />} />} />
+        <Route path="/signup" element={<AnonymousRoute page={<Signup />} />} />
         <Route path="*" element={<div>Not Found</div>} />
       </Routes>
     </AuthProvider>

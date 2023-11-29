@@ -3,17 +3,12 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
-import { FC, useContext } from "react";
-import { AuthContext } from "../../../providers/AuthProvider";
-import { ILoginInput, ITokens } from "./schemas";
-import { LocalStorageService } from "../../../services/LocalStorageService";
+import { FC } from "react";
+import { ILoginInput } from "./schemas";
 import { useAuthService } from "../../../hooks/useAuthService";
 
 export const LoginForm: FC = () => {
   const authService = useAuthService();
-  const navigate = useNavigate();
-  const context = useContext(AuthContext);
 
   const handleErrors = (error: AxiosError) => {
     if (error.response?.status == 422) {
@@ -22,17 +17,12 @@ export const LoginForm: FC = () => {
     }
   };
 
-  const handleTokens = (data: ITokens) => {
-    LocalStorageService.setAccessToken(data.access_token);
-    LocalStorageService.setRefreshToken(data.refresh_token);
-    context?.setIsAuth(true);
-    return navigate("/");
-  };
+
 
   const { mutate } = useMutation({
     mutationFn: authService.getTokens,
     onError: handleErrors,
-    onSuccess: handleTokens,
+    onSuccess: authService.login,
   });
 
   const onSubmit = (login_data: ILoginInput) => {
