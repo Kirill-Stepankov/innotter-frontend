@@ -3,6 +3,8 @@ import { useAxiosInterceptors } from "../../../hooks/useAxiosInterceptors";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthService } from "../../../hooks/useAuthService";
+import Button from '@mui/material/Button';
+
 
 export const App = () => {
   const authService = useAuthService()
@@ -16,6 +18,7 @@ export const App = () => {
   return (
     <>
       <div>
+      <Button variant="contained">Hello world</Button>
         {isLoading ? "Loading..." : JSON.stringify(data)}
         {error?.message}
         {count}
