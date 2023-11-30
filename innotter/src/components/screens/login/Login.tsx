@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,11 +6,9 @@ import { AxiosError } from "axios";
 import { FC, useState } from "react";
 import { ILoginInput } from "./schemas";
 import { useAuthService } from "../../../hooks/useAuthService";
-import { Box, Button, TextField, Typography } from "@mui/material";
-
-interface IErrorData {
-  detail: string;
-}
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { IErrorData } from "../schemas";
 
 export const Login: FC = () => {
   const authService = useAuthService();
@@ -104,6 +101,13 @@ export const Login: FC = () => {
         >
           Sign In
         </Button>
+        <Grid container>
+          <Grid item xs>
+            <Link to="/signup" style={{color: '#363636'}}>
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

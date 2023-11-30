@@ -5,9 +5,9 @@ import AuthProvider from "../providers/AuthProvider";
 import { AnonymousRoute } from "../HOC/AnonymousRoute";
 import { Home } from "./screens/home/Home";
 import { Navbar } from "./Navbar";
-import Signup from "./screens/signup/Signup";
 import { Container } from "@mui/material";
 import { Login } from "./screens/login/Login";
+import { Signup } from "./screens/signup/Signup";
 
 export function Root() {
   return (
