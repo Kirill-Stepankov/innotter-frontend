@@ -63,68 +63,70 @@ export const Signup = () => {
       <Typography component="h1" variant="h5">
         Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <TextField
-          error={!!errors.username || !!signupErrors}
-          margin="normal"
-          required
-          fullWidth
-          id="username"
-          label="Username"
-          autoComplete="username"
-          autoFocus
-          helperText={
-            errors.username
-              ? errors.username?.message
-              : signupErrors
-              ? signupErrors
-              : ""
-          }
-          {...register("username")}
-        />
-        <TextField
-          error={!!errors.hashed_password}
-          margin="normal"
-          required
-          fullWidth
-          label="Password"
-          type="password"
-          id="hashed_password"
-          autoComplete="current-password"
-          helperText={
-            errors.hashed_password ? errors.hashed_password?.message : ""
-          }
-          {...register("hashed_password")}
-        />
-        <TextField
-          error={!!errors.repeat_password}
-          margin="normal"
-          required
-          fullWidth
-          label="Repeat password"
-          type="password"
-          id="repeat_password"
-          autoComplete="repeat-password"
-          helperText={
-            errors.repeat_password ? errors.repeat_password?.message : ""
-          }
-          {...register("repeat_password")}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Sign Up
-        </Button>
-        <Grid container>
-          <Grid item xs>
-            <Link to="/login" style={{ color: "#363636" }}>
-              {"Already have an account? Sign In"}
-            </Link>
+      <Box maxWidth="sm">
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <TextField
+            error={!!errors.username || !!signupErrors}
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            autoComplete="username"
+            autoFocus
+            helperText={
+              errors.username
+                ? errors.username?.message
+                : signupErrors
+                ? signupErrors
+                : ""
+            }
+            {...register("username")}
+          />
+          <TextField
+            error={!!errors.hashed_password}
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            type="password"
+            id="hashed_password"
+            autoComplete="current-password"
+            helperText={
+              errors.hashed_password ? errors.hashed_password?.message : ""
+            }
+            {...register("hashed_password")}
+          />
+          <TextField
+            error={!!errors.repeat_password}
+            margin="normal"
+            required
+            fullWidth
+            label="Repeat password"
+            type="password"
+            id="repeat_password"
+            autoComplete="repeat-password"
+            helperText={
+              errors.repeat_password ? errors.repeat_password?.message : ""
+            }
+            {...register("repeat_password")}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link to="/login" style={{ color: "#363636" }}>
+                {"Already have an account? Sign In"}
+              </Link>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Box>
     </Box>
   );
