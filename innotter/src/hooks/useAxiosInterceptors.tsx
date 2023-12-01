@@ -2,10 +2,11 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../api/axios";
 import { AuthContext } from "../providers/AuthProvider";
-import { AuthService } from "../services/AuthService";
 import { LocalStorageService } from "../services/LocalStorageService";
+import { useAuthService } from "./useAuthService";
 
 export const useAxiosInterceptors = () => {
+  const authService = useAuthService();
   const navigate = useNavigate();
   const context = useContext(AuthContext);
 
@@ -46,7 +47,7 @@ export const useAxiosInterceptors = () => {
             originalRequest._retry = true;
             const refreshToken = LocalStorageService.getRefreshToken();
             LocalStorageService.removeAccessToken();
-            return AuthService.refreshTokens(refreshToken, originalRequest)
+            return authService.refreshTokens(refreshToken, originalRequest)
           }
         }
         return Promise.reject(error);
@@ -57,5 +58,5 @@ export const useAxiosInterceptors = () => {
       instance.interceptors.request.eject(requestInterceptor);
       instance.interceptors.response.eject(responseInterceptor);
     };
-  }, [context, navigate]);
+  }, [authService, context, navigate]);
 };
