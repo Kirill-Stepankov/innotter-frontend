@@ -8,13 +8,31 @@ import { Navbar } from "./Navbar";
 import { Container } from "@mui/material";
 import { Login } from "./screens/login/Login";
 import { Signup } from "./screens/signup/Signup";
+import { Profile } from "./screens/profile/Profile";
+import { User } from "./screens/user/User";
+import { EditProfile } from "./screens/profile/EditProfile";
 
 export function Root() {
   return (
     <AuthProvider>
       <Navbar />
-      <Container sx={{marginTop: '30px'}}>
+      <Container sx={{ marginTop: "30px" }}>
         <Routes>
+          <Route path="/user">
+            <Route index element={<div>Not Found</div>} />
+            <Route
+              path=":id"
+              element={<AuthenticatedRoute page={<User />} />}
+            />
+            <Route
+              path="me"
+              element={<AuthenticatedRoute page={<Profile />} />}
+            />
+            <Route
+              path="settings"
+              element={<AuthenticatedRoute page={<EditProfile />} />}
+            />
+          </Route>
           <Route
             path="/home"
             element={<AuthenticatedRoute page={<Home />} />}

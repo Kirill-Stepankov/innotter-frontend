@@ -17,12 +17,6 @@ export const useAuthService = () => {
         .then((res) => res.data);
     },
 
-    getUserMe() {
-      return instance
-        .get(import.meta.env.VITE_USER_ME_URL)
-        .then((res) => res.data);
-    },
-
     refreshTokens(refreshToken: string | null, originalRequest: object) {
       return instance
         .post(
@@ -64,7 +58,7 @@ export const useAuthService = () => {
       return instance
         .post(import.meta.env.VITE_SIGNUP_URL, signup_data)
         .then((res) => res.data);
-    }
+    },
   };
 
   return AuthService;
