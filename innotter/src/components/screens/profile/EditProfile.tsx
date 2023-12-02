@@ -7,18 +7,25 @@ import * as yup from "yup";
 import { useUserService } from "../../../hooks/useUserService";
 import { useAxiosInterceptors } from "../../../hooks/useAxiosInterceptors";
 import { IUserEdit } from "./shemas";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import { IErrorData } from "../schemas";
 
 export const EditProfile = () => {
+  const [emailErrors, setEmailErrors] = useState<string>();
+
   const navigate = useNavigate();
   const userService = useUserService();
   useAxiosInterceptors();
-  const schema = yup.object().shape({
+  const schema: yup.ObjectSchema<IUserEdit> = yup.object().shape({
     file: yup.mixed(),
     username: yup.string().max(255),
     name: yup.string().max(255),
     email: yup.string().email(),
     surname: yup.string().max(255),
-    phone_number: yup.string().matches(/^(|.{4,255})$/, "Between 5-34 characters"),
+    phone_number: yup
+      .string()
+      .matches(/^(|.{4,255})$/, "Between 4-255 characters"),
   });
 
   const {
@@ -33,9 +40,23 @@ export const EditProfile = () => {
   const handleSuccessPatch = () => {
     navigate("/user/me");
   };
+
+  const handleError = (error: AxiosError) => {
+    if (error.response?.status == 422) {
+      const data = error.response.data as Map<string, string>;
+
+      if ("detail" in data) {
+        const error_data = error.response.data as IErrorData;
+        setEmailErrors(error_data.detail);
+      }
+
+      console.log(data);
+    }
+  };
   const { mutate } = useMutation({
     mutationFn: userService.patchUserMe,
     onSuccess: handleSuccessPatch,
+    onError: handleError,
   });
 
   const onSubmit = (data: IUserEdit) => {
@@ -62,7 +83,7 @@ export const EditProfile = () => {
         alignItems: "center",
       }}
     >
-      <Typography component="h1" variant="h5" style={{marginBottom: "20px"}}>
+      <Typography component="h1" variant="h5" style={{ marginBottom: "20px" }}>
         Edit Info
       </Typography>
       <Box
@@ -76,6 +97,7 @@ export const EditProfile = () => {
           <input type="file" hidden {...register("file")} />
         </Button>
         <TextField
+          error={!!errors.username}
           required={false}
           margin="normal"
           fullWidth
@@ -83,9 +105,11 @@ export const EditProfile = () => {
           label="Username"
           autoComplete="username"
           autoFocus
+          helperText={errors.username ? errors.username?.message : ""}
           {...register("username")}
         />
         <TextField
+          error={!!errors.name}
           required={false}
           margin="normal"
           fullWidth
@@ -93,9 +117,11 @@ export const EditProfile = () => {
           label="Name"
           autoComplete="name"
           autoFocus
+          helperText={errors.name ? errors.name?.message : ""}
           {...register("name")}
         />
         <TextField
+          error={!!errors.surname}
           required={false}
           margin="normal"
           fullWidth
@@ -103,9 +129,11 @@ export const EditProfile = () => {
           label="Surname"
           autoComplete="surname"
           autoFocus
+          helperText={errors.surname ? errors.surname?.message : ""}
           {...register("surname")}
         />
         <TextField
+          error={!!errors.email || !!emailErrors}
           required={false}
           margin="normal"
           fullWidth
@@ -113,9 +141,18 @@ export const EditProfile = () => {
           label="Email"
           autoComplete="email"
           autoFocus
+          helperText={
+            errors.email
+              ? errors.email?.message
+              : emailErrors
+              ? emailErrors
+              : ""
+          }
           {...register("email")}
         />
+        {errors.email?.message}
         <TextField
+          error={!!errors.phone_number}
           required={false}
           margin="normal"
           fullWidth
@@ -123,6 +160,7 @@ export const EditProfile = () => {
           label="Phone number"
           autoComplete="phone_number"
           autoFocus
+          helperText={errors.phone_number ? errors.phone_number?.message : ""}
           {...register("phone_number")}
         />
         <Button
