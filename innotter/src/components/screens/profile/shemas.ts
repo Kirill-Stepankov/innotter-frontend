@@ -1,9 +1,9 @@
 export interface IUserBase {
-    username: string,
-    name: string,
-    email: string,
-    surname: string,
-    phone_number: string
+  username: string;
+  name: string;
+  email: string;
+  surname: string;
+  phone_number: string;
 }
 
 export interface IUser extends IUserBase {
@@ -16,7 +16,14 @@ export interface IUser extends IUserBase {
 }
 
 export interface IUserEdit extends IUserBase {
-    file: FileList
+  file: FileList;
 }
 
-
+export interface IUserEditSchema {
+  file?: FileList | undefined;
+  username?: string | undefined;
+  name?: string | undefined;
+  email?: string | undefined;
+  surname?: string | undefined;
+  phone_number?: string | undefined;
+}

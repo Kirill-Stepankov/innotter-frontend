@@ -1,24 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import * as yup from "yup";
-import { useUserService } from "../../../hooks/useUserService";
-import { useAxiosInterceptors } from "../../../hooks/useAxiosInterceptors";
-import { IUserEdit } from "./shemas";
+import { IUserEdit, IUserEditSchema } from "./shemas";
 import { useState } from "react";
-import { AxiosError } from "axios";
-import { IErrorData } from "../schemas";
+import { usePatchMe } from "./hooks/usePatchMe";
 
 export const EditProfile = () => {
-  const [emailErrors, setEmailErrors] = useState<string>();
+  const [Errors, setErrors] = useState<string>();
+  const { mutate } = usePatchMe({ setErrors });
 
-  const navigate = useNavigate();
-  const userService = useUserService();
-  useAxiosInterceptors();
-  const schema: yup.ObjectSchema<IUserEdit> = yup.object().shape({
-    file: yup.mixed(),
+  const schema = yup.object().shape({
+    file: yup.mixed<FileList>(),
     username: yup.string().max(255),
     name: yup.string().max(255),
     email: yup.string().email(),
@@ -37,29 +30,8 @@ export const EditProfile = () => {
     mode: "all",
   });
 
-  const handleSuccessPatch = () => {
-    navigate("/user/me");
-  };
-
-  const handleError = (error: AxiosError) => {
-    if (error.response?.status == 422) {
-      const data = error.response.data as Map<string, string>;
-
-      if ("detail" in data) {
-        const error_data = error.response.data as IErrorData;
-        setEmailErrors(error_data.detail);
-      }
-
-      console.log(data);
-    }
-  };
-  const { mutate } = useMutation({
-    mutationFn: userService.patchUserMe,
-    onSuccess: handleSuccessPatch,
-    onError: handleError,
-  });
-
-  const onSubmit = (data: IUserEdit) => {
+  const onSubmit = (dat: IUserEditSchema) => {
+    const data = dat as IUserEdit
     const formData = new FormData();
     if (data.file[0]) {
       formData.append("file", data.file[0]);
@@ -89,7 +61,7 @@ export const EditProfile = () => {
       <Box
         maxWidth="sm"
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => onSubmit(data))}
         noValidate
       >
         <Button variant="outlined" component="label" fullWidth>
@@ -97,7 +69,7 @@ export const EditProfile = () => {
           <input type="file" hidden {...register("file")} />
         </Button>
         <TextField
-          error={!!errors.username}
+          error={!!errors["username"]}
           required={false}
           margin="normal"
           fullWidth
@@ -133,7 +105,7 @@ export const EditProfile = () => {
           {...register("surname")}
         />
         <TextField
-          error={!!errors.email || !!emailErrors}
+          error={!!errors.email}
           required={false}
           margin="normal"
           fullWidth
@@ -141,13 +113,7 @@ export const EditProfile = () => {
           label="Email"
           autoComplete="email"
           autoFocus
-          helperText={
-            errors.email
-              ? errors.email?.message
-              : emailErrors
-              ? emailErrors
-              : ""
-          }
+          helperText={errors.email ? errors.email?.message : ""}
           {...register("email")}
         />
         {errors.email?.message}
@@ -163,6 +129,12 @@ export const EditProfile = () => {
           helperText={errors.phone_number ? errors.phone_number?.message : ""}
           {...register("phone_number")}
         />
+        {Errors ? (
+          <Typography style={{ color: "#eb4034" }}>{Errors}</Typography>
+        ) : (
+          ""
+        )}
+
         <Button
           type="submit"
           fullWidth
@@ -171,7 +143,6 @@ export const EditProfile = () => {
         >
           Save
         </Button>
-        {errors.username?.message}
       </Box>
     </Box>
   );
