@@ -17,11 +17,19 @@ export const useUserService = () => {
     },
 
     patchUserMe(data: FormData) {
-        return instance.patch(import.meta.env.VITE_USER_ME_URL, data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        })
+      return instance.patch(import.meta.env.VITE_USER_ME_URL, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+
+    patchUser(data: FormData, id: string) {
+      return instance.patch(import.meta.env.VITE_USER_URL + "/" + id, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
 
     getUserById(id: string | undefined) {

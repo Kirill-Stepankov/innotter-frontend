@@ -10,8 +10,9 @@ import { Login } from "./screens/login/Login";
 import { Signup } from "./screens/signup/Signup";
 import { MeProfile } from "./screens/profile/MeProfile";
 import { UserProfile } from "./screens/user/UserProfile";
-import { EditProfile } from "./screens/profile/EditProfile";
+import { EditMeProfile } from "./screens/profile/EditMeProfile";
 import { NotFound } from "./screens/errors/NotFound";
+import { EditUserProfile } from "./screens/user/EditUserProfile";
 
 export function Root() {
   return (
@@ -21,17 +22,23 @@ export function Root() {
         <Routes>
           <Route path="/user">
             <Route index element={<NotFound />} />
-            <Route
-              path=":id"
-              element={<AuthenticatedRoute page={<UserProfile />} />}
-            />
+            <Route path=":id">
+              <Route
+                index
+                element={<AuthenticatedRoute page={<UserProfile />} />}
+              />
+              <Route
+                path="edit"
+                element={<AuthenticatedRoute page={<EditUserProfile />} />}
+              />
+            </Route>
             <Route
               path="me"
               element={<AuthenticatedRoute page={<MeProfile />} />}
             />
             <Route
               path="settings"
-              element={<AuthenticatedRoute page={<EditProfile />} />}
+              element={<AuthenticatedRoute page={<EditMeProfile />} />}
             />
           </Route>
           <Route
