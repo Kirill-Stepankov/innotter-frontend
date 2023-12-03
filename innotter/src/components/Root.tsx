@@ -11,6 +11,7 @@ import { Signup } from "./screens/signup/Signup";
 import { Profile } from "./screens/profile/Profile";
 import { User } from "./screens/user/User";
 import { EditProfile } from "./screens/profile/EditProfile";
+import { NotFound } from "./screens/errors/NotFound";
 
 export function Root() {
   return (
@@ -19,7 +20,7 @@ export function Root() {
       <Container sx={{ marginTop: "30px" }}>
         <Routes>
           <Route path="/user">
-            <Route index element={<div>Not Found</div>} />
+            <Route index element={<NotFound />} />
             <Route
               path=":id"
               element={<AuthenticatedRoute page={<User />} />}
@@ -43,7 +44,7 @@ export function Root() {
             path="/signup"
             element={<AnonymousRoute page={<Signup />} />}
           />
-          <Route path="*" element={<div>Not Found</div>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
     </AuthProvider>

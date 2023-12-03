@@ -1,32 +1,16 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAxiosInterceptors } from "../../../hooks/useAxiosInterceptors";
 import { Link } from "react-router-dom";
-import { useUserService } from "../../../hooks/useUserService";
 import { Button } from "@mui/material";
-import { useAuthService } from "../../../hooks/useAuthService";
+import { useGetMe } from "./hooks/useGetMe";
+import { useDeleteMe } from "./hooks/useDeleteMe";
 
 export const Profile = () => {
-  const userService = useUserService();
-  const authService = useAuthService();
-  useAxiosInterceptors();
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["me"],
-    queryFn: userService.getUserMe,
-  });
-
-  const handleSuccessDelete = () => {
-    authService.logout();
-  };
-
-  const { mutate } = useMutation({
-    mutationFn: userService.deleteUserMe,
-    onSuccess: handleSuccessDelete,
-  });
+  const { isLoading, data, error } = useGetMe();
+  const { mutate } = useDeleteMe();
 
   const handleDelete = () => {
     mutate();
   };
+
   return (
     <>
       <div>

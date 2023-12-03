@@ -1,23 +1,17 @@
 import { useParams } from "react-router";
-import { useAxiosInterceptors } from "../../../hooks/useAxiosInterceptors";
-import { useQuery } from "@tanstack/react-query";
-import { useUserService } from "../../../hooks/useUserService";
-
+import { useGetUser } from "./hooks/useGetUser";
+import { NotFound } from "../errors/NotFound";
 
 // проверка что такой юзер вообще существует
 export const User = () => {
   const { id } = useParams();
-  const userService = useUserService();
-  useAxiosInterceptors();
+  const query = useGetUser({ id });
 
-  const { data, isLoading} = useQuery({
-    queryKey: ["user"],
-    queryFn: () => userService.getUserById(id),
-  });
-
-
-  return(<div>
-    User
-    {isLoading ? "Loading..." : JSON.stringify(data)}
-    </div>);
+  return (
+    <>
+      {query.error ? (
+        <NotFound />
+      ) : <User owner={false} />}
+    </>
+  );
 };
