@@ -8,13 +8,39 @@ import { Navbar } from "./Navbar";
 import { Container } from "@mui/material";
 import { Login } from "./screens/login/Login";
 import { Signup } from "./screens/signup/Signup";
+import { MeProfile } from "./screens/profile/MeProfile";
+import { UserProfile } from "./screens/user/UserProfile";
+import { EditMeProfile } from "./screens/profile/EditMeProfile";
+import { NotFound } from "./screens/errors/NotFound";
+import { EditUserProfile } from "./screens/user/EditUserProfile";
 
 export function Root() {
   return (
     <AuthProvider>
       <Navbar />
-      <Container sx={{marginTop: '30px'}}>
+      <Container sx={{ marginTop: "30px" }}>
         <Routes>
+          <Route path="/user">
+            <Route index element={<NotFound />} />
+            <Route path=":id">
+              <Route
+                index
+                element={<AuthenticatedRoute page={<UserProfile />} />}
+              />
+              <Route
+                path="edit"
+                element={<AuthenticatedRoute page={<EditUserProfile />} />}
+              />
+            </Route>
+            <Route
+              path="me"
+              element={<AuthenticatedRoute page={<MeProfile />} />}
+            />
+            <Route
+              path="settings"
+              element={<AuthenticatedRoute page={<EditMeProfile />} />}
+            />
+          </Route>
           <Route
             path="/home"
             element={<AuthenticatedRoute page={<Home />} />}
@@ -25,7 +51,7 @@ export function Root() {
             path="/signup"
             element={<AnonymousRoute page={<Signup />} />}
           />
-          <Route path="*" element={<div>Not Found</div>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
     </AuthProvider>
