@@ -4,7 +4,7 @@ import { useAxiosInterceptors } from "../../../../hooks/useAxiosInterceptors";
 import { useUserService } from "../../../../hooks/useUserService";
 
 export const useDeleteMe = () => {
-    const userService = useUserService();
+  const userService = useUserService();
   const authService = useAuthService();
   useAxiosInterceptors();
 
@@ -17,5 +17,5 @@ export const useDeleteMe = () => {
     onSuccess: handleSuccessDelete,
   });
 
-  return mutation
-}
+  return mutation;
+};

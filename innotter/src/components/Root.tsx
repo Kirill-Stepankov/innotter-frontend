@@ -8,8 +8,8 @@ import { Navbar } from "./Navbar";
 import { Container } from "@mui/material";
 import { Login } from "./screens/login/Login";
 import { Signup } from "./screens/signup/Signup";
-import { Profile } from "./screens/profile/Profile";
-import { User } from "./screens/user/User";
+import { MeProfile } from "./screens/profile/MeProfile";
+import { UserProfile } from "./screens/user/UserProfile";
 import { EditProfile } from "./screens/profile/EditProfile";
 import { NotFound } from "./screens/errors/NotFound";
 
@@ -23,11 +23,11 @@ export function Root() {
             <Route index element={<NotFound />} />
             <Route
               path=":id"
-              element={<AuthenticatedRoute page={<User />} />}
+              element={<AuthenticatedRoute page={<UserProfile />} />}
             />
             <Route
               path="me"
-              element={<AuthenticatedRoute page={<Profile />} />}
+              element={<AuthenticatedRoute page={<MeProfile />} />}
             />
             <Route
               path="settings"

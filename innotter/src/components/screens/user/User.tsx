@@ -1,17 +1,46 @@
-import { useParams } from "react-router";
-import { useGetUser } from "./hooks/useGetUser";
-import { NotFound } from "../errors/NotFound";
+import { UseQueryResult } from "@tanstack/react-query";
+import { FC, MouseEventHandler } from "react";
+import { Link } from "react-router-dom";
+import { IUser } from "../profile/shemas";
+import { Button } from "@mui/material";
 
-// проверка что такой юзер вообще существует
-export const User = () => {
-  const { id } = useParams();
-  const query = useGetUser({ id });
+interface IUserProps {
+  owner: boolean;
+  query: UseQueryResult<IUser, Error>;
+  handleDelete: MouseEventHandler;
+}
 
+export const User: FC<IUserProps> = ({ owner, query, handleDelete }) => {
   return (
     <>
-      {query.error ? (
-        <NotFound />
-      ) : <User owner={false} />}
+      <div>
+        {query.isLoading ? (
+          "Loading..."
+        ) : (
+          <div>
+            {" "}
+            <img src={`data:image/jpeg;base64,${query.data?.image}`} />{" "}
+            {JSON.stringify(query.data)}{" "}
+          </div>
+        )}
+        {query.error?.message}
+        <p>
+          <Link to="/home">Home</Link>
+        </p>
+        {owner ? (
+          <>
+            <Link to="/user/settings">
+              <Button variant="contained">Settings</Button>
+            </Link>
+            <br />
+            <Button variant="contained" onClick={handleDelete}>
+              Delete account
+            </Button>
+          </>
+        ) : (
+          ""
+        )}
+      </div>
     </>
   );
 };
